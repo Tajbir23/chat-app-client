@@ -1,9 +1,15 @@
-const { NextResponse } = require("next/server")
+const { NextResponse } = require("next/server");
 
-export const middleware = (request) => {
-    return NextResponse.redirect(new URL('/chat', request.url))
-}
+export const middleware = async (request) => {
+    const cookie = request.cookies.get('next-auth.session-token');
+    
+    if(!cookie){
+        return NextResponse.redirect(new URL('/api/auth/signin', request.url))
+    }
+    return NextResponse.next();
+};
+
 
 export const config = {
-    matcher: ['/']
-}
+    matcher: ['/chat/:path*'],
+};

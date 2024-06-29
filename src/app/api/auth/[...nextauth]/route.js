@@ -31,7 +31,7 @@ export const authOptions = {
 
     callbacks: {
       async jwt({ token, account, user }) {
-        // console.log(account, token, user, 'jwt')
+        // console.log(user, 'jwt')
         // Persist the OAuth access_token and or the user id to the token right after signin
         if (account) {
           // console.log(token)
@@ -44,6 +44,10 @@ export const authOptions = {
         session.user.type = token.type
         return session
       },
+
+      async redirect({url, baseUrl}){
+        return `${baseUrl}/chat`
+      }
     }
     
   }
