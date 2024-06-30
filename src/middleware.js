@@ -1,10 +1,11 @@
 const { NextResponse } = require("next/server");
 
 export const middleware = async (request) => {
-    const cookie = request.cookies.get('next-auth.session-token');
+    const token = request.headers.get('Authorization');
+    console.log(token, 'token')
     
-    if(!cookie){
-        return NextResponse.redirect(new URL('/api/auth/signin', request.url))
+    if(!token){
+        return NextResponse.redirect(new URL('/', request.url))
     }
     return NextResponse.next();
 };

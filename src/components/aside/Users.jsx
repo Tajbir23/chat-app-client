@@ -1,5 +1,4 @@
 "use client"
-import { useSession } from "next-auth/react"
 import Image from "next/image"
 import Link from "next/link"
 import { useParams } from "next/navigation"
@@ -9,8 +8,6 @@ const Users = () => {
     const {id} = useParams()
     const dummyArray =  Array.from({length: 500}, (x, i) => i)
 
-    const session = useSession()
-    console.log(session)
 
   return (
     <div className="p-4 flex flex-col gap-y-4">
