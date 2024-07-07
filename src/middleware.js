@@ -1,13 +1,33 @@
+import axiosSecure from "./components/api/useAxiosSecure";
+
 const { NextResponse } = require("next/server");
 
 export const middleware = async (request) => {
-    const token = request.headers.get('Authorization');
-    console.log(token, 'token')
+    const token = request.cookies.get("token")?.value;
+    // console.log(token, 'token')
     
     if(!token){
         return NextResponse.redirect(new URL('/', request.url))
     }
-    return NextResponse.next();
+
+    try {
+        if(token){
+            axiosSecure.defaults.headers['Authorization'] = `Bearer ${token}`;
+            const res = await axiosSecure.post('/secure-test')
+        if(res.data){
+            if(res.data.auth === false){
+                request.cookies.delete('token')
+                return NextResponse.redirect(new URL('/', request.url))
+            }
+            return NextResponse.next();
+        } else {
+            return NextResponse.redirect(new URL('/', request.url))
+        }
+        }
+    } catch (error) {
+        
+    }
+    
 };
 
 
