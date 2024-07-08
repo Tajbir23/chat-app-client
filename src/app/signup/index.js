@@ -4,11 +4,11 @@ import { cookies } from "next/headers";
 
 const { default: axiosPublic } = require("@/components/api/usePublicAxios");
 
-  const handleSubmit = async(e) => {
-    const name = e.get('name')
-    const email = e.get('email')
-    const password = e.get('password')
-    const image = e.get('image')
+  const handleSubmit = async({ name, email, password, image }) => {
+    // const name = e.get('name')
+    // const email = e.get('email')
+    // const password = e.get('password')
+    // const image = e.get('image')
     
     // const form = e.target;
     // const name = form.name.value;
@@ -31,6 +31,7 @@ const { default: axiosPublic } = require("@/components/api/usePublicAxios");
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict', // 'strict' or 'lax'
           })
+          return token.data
         //   localStorage.setItem("token", `Bearer ${token.data}`);
         //   router.push("/chat");
         }

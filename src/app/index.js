@@ -1,15 +1,13 @@
 "use server"
 
 import { cookies } from "next/headers";
-// import { useRouter } from "next/router";
 
 const { default: axiosPublic } = require("@/components/api/usePublicAxios");
 
-const handleSubmit = async(e) => {
-    // const router = useRouter()
+const handleSubmit = async({email, password}) => {
     
-    const email = e.get('email')
-    const password = e.get('password')
+    // const email = e.get('email')
+    // const password = e.get('password')
 
     try {
       const res = await axiosPublic.post('/api/login', { email, password });
@@ -22,7 +20,8 @@ const handleSubmit = async(e) => {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production'
         });
-        // router.push('/chat')
+        
+        return res.data
       }
     } catch (error) {
       console.log(error.message)

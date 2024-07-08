@@ -1,9 +1,22 @@
+"use client"
 import handleSubmit from "@/app"
+import { useRouter } from "next/navigation"
 
 
 const LoginForm = () => {
+  const router = useRouter()
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    const email = e.target.email.value
+    const password = e.target.password.value
+    const data = await handleSubmit({ email, password })
+    if(data){
+      router.push('/chat')
+    }
+  }
   return (
-    <form action={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
+    <form onSubmit={onSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
         <div className="mb-4">
           <label className="block mb-1" htmlFor="email">Email</label>

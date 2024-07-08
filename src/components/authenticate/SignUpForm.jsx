@@ -1,9 +1,23 @@
+"use client"
 import handleSubmit from "@/app/signup"
+import { useRouter } from "next/navigation"
 
 
 const SignUpForm = () => {
+  const router = useRouter()
+  const onSubmit = async(e) => {
+    e.preventDefault()
+    const name = e.target.name.value
+    const email = e.target.email.value
+    const password = e.target.password.value
+    const image = e.target.image.files[0]
+    const data = await handleSubmit({ name, email, password, image })
+    if(data){
+      router.push("/chat")
+    }
+  }
   return (
-    <form action={handleSubmit} className="space-y-6">
+    <form onSubmit={onSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">Username</label>
             <input 
