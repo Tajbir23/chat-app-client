@@ -1,12 +1,12 @@
 "use server"
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+// import { useRouter } from "next/router";
 
 const { default: axiosPublic } = require("@/components/api/usePublicAxios");
 
 const handleSubmit = async(e) => {
-    
+    // const router = useRouter()
     
     const email = e.get('email')
     const password = e.get('password')
@@ -22,7 +22,7 @@ const handleSubmit = async(e) => {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production'
         });
-        redirect('/chat')
+        // router.push('/chat')
       }
     } catch (error) {
       console.log(error.message)

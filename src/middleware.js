@@ -7,9 +7,14 @@ export const middleware = async (request) => {
     const token = request.cookies.get("token")?.value;
     const pathname = request.nextUrl.pathname
     // console.log(token, 'token')
+    console.log(pathname, 'line 10')
     
     if(!token){
-        return NextResponse.redirect(new URL('/', request.url))
+        console.log(pathname, 'line 13')
+        if (pathname !== '/') {
+            return NextResponse.redirect(new URL('/', request.url));
+        }
+        return NextResponse.next()
     }
 
     console.log(pathname, 'line 15')
@@ -23,8 +28,13 @@ export const middleware = async (request) => {
 
         if(res.data){
             if(res.data.auth === false){
-                request.cookies.delete('token')
-                return NextResponse.redirect(new URL('/', request.url))
+                const response = NextResponse.redirect(new URL('/', request.url))
+                
+                console.log(pathname, 'line 33')
+
+                response.cookies.delete('token')
+                
+                return response
             }
 
             console.log(res.data)
