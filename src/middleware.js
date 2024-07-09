@@ -21,13 +21,27 @@ export const middleware = async (request) => {
     try {
         if(token){
             
-            axiosSecure.defaults.headers['Authorization'] = `Bearer ${token}`;
-            const res = await axiosSecure.post('/secure-test')
+            // axiosSecure.defaults.headers['Authorization'] = `Bearer ${token}`;
+            // const res = await axiosSecure.post('/secure-test')
+            const res = await fetch('http://localhost:5000/api/secure-test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`
+                },
+                cache: 'force-cache'
+            })
 
-        console.log(pathname, 'line 22')
+            if(!res.ok){
+                return console.log(`status : ${res.status}`)
+            }
 
-        if(res.data){
-            if(res.data.auth === false){
+            const data = await res.json()
+
+        console.log(data, 'line 22')
+
+        if(data){
+            if(data.auth === false){
                 const response = NextResponse.redirect(new URL('/', request.url))
                 
                 console.log(pathname, 'line 33')
@@ -37,9 +51,9 @@ export const middleware = async (request) => {
                 return response
             }
 
-            console.log(res.data, 'data')
+            console.log(data, 'data')
 
-            console.log(pathname, 'line 29')
+            console.log(pathname, 'line 51')
 
             if(pathname === "/"){
                 console.log(pathname)
