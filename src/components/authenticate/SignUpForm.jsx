@@ -11,13 +11,14 @@ const SignUpForm = () => {
     const email = e.target.email.value
     const password = e.target.password.value
     const image = e.target.image.files[0]
+    // const formData = new FormData(e.target)
     const data = await handleSubmit({ name, email, password, image })
     if(data){
       router.push("/chat")
     }
   }
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
+    <form onSubmit={onSubmit} className="space-y-6" encType="multipart/form-data">
           <div>
             <label className="block text-sm font-medium text-gray-700">Username</label>
             <input 

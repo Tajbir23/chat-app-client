@@ -37,7 +37,7 @@ export const middleware = async (request) => {
                 return response
             }
 
-            console.log(res.data)
+            console.log(res.data, 'data')
 
             console.log(pathname, 'line 29')
 

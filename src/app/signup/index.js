@@ -1,39 +1,46 @@
 "use server"
 
+import baseUrl from "@/components/api/baseUrl";
 import { cookies } from "next/headers";
 
-const { default: axiosPublic } = require("@/components/api/usePublicAxios");
-
   const handleSubmit = async({ name, email, password, image }) => {
-    // const name = e.get('name')
-    // const email = e.get('email')
-    // const password = e.get('password')
-    // const image = e.get('image')
-    
-    // const form = e.target;
-    // const name = form.name.value;
-    // const email = form.email.value;
-    // const password = form.password.value;
-    // const image = form.image.files[0];
+    const api = baseUrl()
     try {
-      const res = await axiosPublic.post('/api/signup', { name, email, password, image });
       
-      if(res.data){
-        console.log(res.data, 'signup')
-        const token = await axiosPublic.post('/api/login', { email, password });
-        if(token.data){
-          console.log(token.data)
+      const res = await fetch(`${api}/api/signup`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({name, email, password, image})
+      })
+
+      const {user} = await res.json()
+      
+      if(user){
+        console.log(user, 'signup')
+        const token = await fetch(`${api}/api/login`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({email,password})
+        })
+
+        const data = await token.json()
+        console.log(data, 'signup')
+
+        if(data.token){
+          console.log(data.token)
           cookies().set({
             name: 'token',
-            value: token.data,
+            value: data.token,
             expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
             path: '/',
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict', // 'strict' or 'lax'
           })
-          return token.data
-        //   localStorage.setItem("token", `Bearer ${token.data}`);
-        //   router.push("/chat");
+          return data.token
         }
       }
     } catch (error) {
