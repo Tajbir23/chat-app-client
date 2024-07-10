@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 
   const handleSubmit = async({ name, email, password, image }) => {
     const api = baseUrl()
+    
     try {
       
       const res = await fetch(`${api}/api/signup`, {

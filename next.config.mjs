@@ -9,6 +9,9 @@ const nextConfig = {
                 pathname: '/**',
             },
         ]
+    },
+    env: {
+        NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: process.env.COUDINARY_API_NAME,
     }
 };
 

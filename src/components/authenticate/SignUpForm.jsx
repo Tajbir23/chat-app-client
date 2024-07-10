@@ -1,18 +1,24 @@
 "use client"
 import handleSubmit from "@/app/signup"
+import { CldUploadWidget } from "next-cloudinary"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 
 const SignUpForm = () => {
   const router = useRouter()
+  const [imageUrl, setImageUrl] = useState(null);
+
   const onSubmit = async(e) => {
     e.preventDefault()
     const name = e.target.name.value
     const email = e.target.email.value
     const password = e.target.password.value
-    const image = e.target.image.files[0]
+    // const image = e.target.image.files[0]
+
     // const formData = new FormData(e.target)
-    const data = await handleSubmit({ name, email, password, image })
+    const data = await handleSubmit({ name, email, password, image: imageUrl })
     if(data){
       router.push("/chat")
     }
@@ -48,11 +54,23 @@ const SignUpForm = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
-            <input 
+            <CldUploadWidget
+          cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
+          uploadPreset="your-upload-preset"
+          onSuccess={(result) => setImageUrl(result.info.secure_url)}
+        >
+          {({ open }) => (
+            <button type="button" onClick={open} className="mt-1 block w-full text-sm text-gray-500">
+              Upload Image
+            </button>
+          )}
+        </CldUploadWidget>
+        {imageUrl && <Image height={100} width={100} src={imageUrl} alt="Uploaded image" className="mt-2 h-20 w-20 object-cover" />}
+            {/* <input 
               type="file" 
               name="image" 
               className="mt-1 block w-full text-sm text-gray-500"
-            />
+            /> */}
           </div>
           <div>
             <button 
